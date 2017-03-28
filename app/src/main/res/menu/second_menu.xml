@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item_camera"
+        android:title="@string/camera"
+        android:icon="@drawable/camera"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/item_background"
+        android:title="@string/backgroundcolor"
+        android:icon="@drawable/editicon"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/item_check"
+        android:title="@string/check"
+        android:icon="@drawable/check"
+        app:showAsAction="always"/>
+</menu>

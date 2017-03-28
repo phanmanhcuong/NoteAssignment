@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">NoteAssignment</string>
+    <string name="note">note</string>
+    <string name="camera">camera</string>
+    <string name="backgroundcolor">backgroundcolor</string>
+    <string name="check">check</string>
+    <string name="add">add</string>
+</resources>
