@@ -14,9 +14,8 @@ public class FirstScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_screen);
         ActionBar actionBar = this.getSupportActionBar();
-        //actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
-        actionBar.setLogo(R.drawable.note);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.drawable.note);
     }
 
     @Override
