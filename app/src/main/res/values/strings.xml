@@ -6,4 +6,7 @@
     <string name="check">check</string>
     <string name="add">add</string>
     <string name="choosecolor">Choose Colors</string>
+    <string name="alarm">Alarm</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
 </resources>

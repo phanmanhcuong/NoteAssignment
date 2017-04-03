@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="lnlayout_datetime" type="id" />
+    <item name="btnDate" type="id" />
+    <item name="btnTime" type="id" />
+</resources>
