@@ -120,6 +120,8 @@ public class SecondScreenActivity extends AppCompatActivity {
         Note note = new Note(title, content, createdTime, dateHour);
         db.addNote(note);
 
+        Intent intent = new Intent(this, FirstScreenActivity.class);
+        startActivity(intent);
     }
     public void showDateTimePicker(View view){
         LinearLayout alarmLayout = (LinearLayout)findViewById(R.id.lnlayout_alarm);
