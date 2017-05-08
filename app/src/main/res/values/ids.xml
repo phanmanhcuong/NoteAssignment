@@ -3,4 +3,6 @@
     <item name="lnlayout_datetime" type="id" />
     <item name="btnDate" type="id" />
     <item name="btnTime" type="id" />
+    <item name="imgbtn_loadfile" type="id" />
+    <item name="imgbtn_delete" type="id" />
 </resources>

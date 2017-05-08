@@ -11,4 +11,5 @@
     <color name="colorCyan">#00FFFF</color>
     <color name="colorGrey">#808080</color>
     <color name="colorSilver">#C0C0C0</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>

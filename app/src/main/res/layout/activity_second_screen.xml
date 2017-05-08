@@ -1,39 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/screen2_id">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_date"
-        android:gravity="right"
-        android:layout_marginRight="10dp"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textLongMessage"
-        android:id="@+id/et_title"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/et_content"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lnlayout_alarm"
-        android:layout_marginLeft="10dp">
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rl_screen2"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/screen2_id">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/alarm"/>
-        <TextView
+            android:id="@+id/iv_picture"
+            android:gravity="left"
             android:layout_marginLeft="10dp"
-            android:id="@+id/tv_alarm"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/alarm"
-            android:onClick="showDateTimePicker"
-            android:gravity="center"/>
+            android:layout_marginTop="10dp"
+            android:onClick="imageviewClickedHandle"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_date"
+            android:gravity="right"
+            android:layout_marginRight="10dp"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textLongMessage"
+            android:id="@+id/et_title"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lnlayout_alarm"
+            android:layout_marginLeft="10dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/alarm"/>
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:id="@+id/tv_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/alarm"
+                android:onClick="showDateTimePicker"
+                android:gravity="center"/>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

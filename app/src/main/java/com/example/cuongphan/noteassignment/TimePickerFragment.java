@@ -33,7 +33,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Button btnTime = (Button) getActivity().findViewById(R.id.btnTime);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:MM");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         String time = String.valueOf(hourOfDay)+":"+String.valueOf(minute);
         try {
             Date timePicker = timeFormat.parse(time);

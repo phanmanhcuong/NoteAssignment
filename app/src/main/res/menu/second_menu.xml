@@ -10,7 +10,7 @@
     <item
         android:id="@+id/item_background"
         android:title="@string/backgroundcolor"
-        android:icon="@drawable/editicon"
+        android:icon="@drawable/edit"
         app:showAsAction="always"/>
 
     <item

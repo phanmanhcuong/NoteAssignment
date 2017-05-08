@@ -1,5 +1,7 @@
 package com.example.cuongphan.noteassignment;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by CuongPhan on 4/3/2017.
  */
@@ -10,62 +12,68 @@ public class Note {
     public String content;
     public String createTime;
     public String dateHour;
+    public byte[] byteArrayPicture;
 
-    public Note() {
+    public Note() {}
 
-    }
-
-    public void Note(String title, String content, String createTime){
-        this.title = title;
-        this.content = content;
-        this.createTime = createTime;
-    }
-    public Note(int id, String title, String content, String createTime, String dateHour){
-        this.id = id;
+    public Note(String title, String content, String createTime, String dateHour) {
         this.title = title;
         this.content = content;
         this.createTime = createTime;
         this.dateHour = dateHour;
     }
 
-    public Note(String title, String content, String createTime, String dateHour){
+    public Note(String title, String content, String createdTime, String dateHour, byte[] byteArray) {
         this.title = title;
         this.content = content;
-        this.createTime = createTime;
+        this.createTime = createdTime;
         this.dateHour = dateHour;
+        this.byteArrayPicture = byteArray;
     }
 
-    public void setId(int id){
+
+    public void setId(int id) {
         this.id = id;
     }
 
-    public void setTitle(String title){
+    public int getId() {
+        return id;
+    }
+
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setContent(String content){
-        this.content = content;
-    }
-
-    public void setCreateTime(String createTime){
-        this.createTime = createTime;
-    }
-
-    public void setDateHour(String dateHour){
-        this.dateHour = dateHour;
-    }
-    public String getTitle(){
+    public String getTitle() {
         return title;
     }
 
-    public String getContent(){
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
         return content;
     }
-    public String getCreateTime(){
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public void setDateHour(String dateHour) {
+        this.dateHour = dateHour;
+    }
+
+    public String getCreateTime() {
         return createTime;
     }
 
-    public String getDateHour(){
+    public String getDateHour() {
         return dateHour;
     }
+
+    public byte[] getByteArrayPicture() {
+        return byteArrayPicture;
+    }
 }
+

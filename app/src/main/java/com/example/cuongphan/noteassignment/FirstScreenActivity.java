@@ -9,14 +9,13 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class FirstScreenActivity extends AppCompatActivity {
 
@@ -63,10 +62,11 @@ public class FirstScreenActivity extends AppCompatActivity {
     private LinearLayout createLinearLayout(Note note){
         LinearLayout lnLayout = new LinearLayout(this);
         lnLayout.setOrientation(LinearLayout.VERTICAL);
-        String title, content, createdTime;
+        String title, content, createdTime, datetime;
         title = note.getTitle();
         content = note.getContent();
         createdTime = note.getCreateTime();
+        datetime = note.getDateHour();
 
         TextView tv_title = new TextView(this);
         tv_title.setText(title);
@@ -88,8 +88,40 @@ public class FirstScreenActivity extends AppCompatActivity {
         lnLayout.addView(tv_content);
         lnLayout.addView(tv_createdTime);
         lnLayout.setPadding(20, 0, 0, 20);
-        lnLayout.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+        lnLayout.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1f));
+        lnLayout.setOnClickListener(new layoutClickHandle(title, content, createdTime, datetime, note));
         return lnLayout;
+    }
+
+    private class layoutClickHandle implements View.OnClickListener {
+        private String title;
+        private String content;
+        private String createdTime;
+        private String datetime;
+        private int noteId;
+
+        public layoutClickHandle(String title, String content, String createdTime, String datetime, Note note) {
+            this.title = title;
+            this.content = content;
+            this.createdTime = createdTime;
+            this.datetime = datetime;
+            this.noteId = note.getId();
+        }
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(FirstScreenActivity.this, SecondScreenActivity.class);
+            Bundle info = new Bundle();
+            String[] datehour;
+            datehour = datetime.split(" ");
+            info.putString("title", title);
+            info.putString("content", content);
+            info.putString("createdTime", createdTime);
+            info.putString("date", datehour[0]);
+            info.putString("hour", datehour[1]);
+            info.putInt("note_id", noteId);
+            intent.putExtras(info);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -106,4 +138,5 @@ public class FirstScreenActivity extends AppCompatActivity {
         }
         return true;
     }
+
 }

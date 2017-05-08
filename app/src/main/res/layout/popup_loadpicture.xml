@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/ln_layout_loadpicture"
+    android:orientation="vertical"
+    android:background="@color/colorWhite"
+    android:theme="@android:style/Theme.Light">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/insert_picture"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="@color/colorBlack"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_takephoto"
+            android:text="@string/take_photo"
+            android:drawableLeft="@drawable/camera2"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:onClick="takePhotoHandle"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_choosephoto"
+            android:text="@string/choose_photo"
+            android:gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/uploadimage"
+            android:onClick="choosePhotoHandle"/>
+</LinearLayout>
