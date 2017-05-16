@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".FirstScreenActivity">
+        <activity android:name=".NoteList">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,8 +26,8 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".SecondScreenActivity"
-            android:parentActivityName=".FirstScreenActivity">
+        <activity android:name=".NoteDetail"
+            android:parentActivityName=".NoteList">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 

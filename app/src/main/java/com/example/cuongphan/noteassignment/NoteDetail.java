@@ -44,26 +44,27 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-
 /**
  * Created by CuongPhan on 3/28/2017.
  */
 
-public class SecondScreenActivity extends AppCompatActivity {
+public class NoteDetail extends AppCompatActivity {
     private static final int DATEPICKER_FLAG = 1;
     private static final int TIMEPICKER_FLAG = 2;
     private static final int EXITDATETIMEPICKER_FLAG = 3;
     private static final int DELETENOTE_FLAG = 4;
     private static final int SAVEFILE_FLAG = 5;
+    private static final int DELETE_IMAGE_FLAG = 6;
     private PopupWindow popupWindow;
     private static final int CAMERA_REQUEST = 1;
     private static final int GALLERY_LOAD_IMAGE = 2;
     private Note note = new Note();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second_screen);
+        setContentView(R.layout.activity_notedetail);
 
         //add icon to actionbar
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
@@ -82,24 +83,32 @@ public class SecondScreenActivity extends AppCompatActivity {
         Bundle info = intent.getExtras();
         if (info != null) {
             //get note id to check if note is already exist to update that note
-            note.setId(info.getInt("note_id"));
-
-            SqliteHandler db = new SqliteHandler(this);
-            byte[] byteArrayPicture = db.getPicture(info.getInt("note_id"));
-            if (byteArrayPicture != null) {
-                ImageView iv_picture = (ImageView) findViewById(R.id.iv_picture);
-                iv_picture.setImageBitmap(BitmapFactory.decodeByteArray(byteArrayPicture, 0, byteArrayPicture.length));
-                iv_picture.setOnClickListener(new OnClickEventHandler(note.getId()));
+            note.setId(info.getInt(getResources().getString(R.string.note_id)));
+            if(note.getId() != 0) {
+                SqliteHandler db = new SqliteHandler(this);
+                byte[] byteArrayPicture = db.getPicture(info.getInt(getResources().getString(R.string.note_id)));
+                if (byteArrayPicture != null) {
+                    ImageView iv_picture = (ImageView) findViewById(R.id.iv_picture);
+                    iv_picture.setImageBitmap(BitmapFactory.decodeByteArray(byteArrayPicture, 0, byteArrayPicture.length));
+                    iv_picture.setOnClickListener(new OnClickEventHandler(DELETE_IMAGE_FLAG, note.getId()));
+                }
             }
-
+            else{
+                byte[] byteArrayPicture = info.getByteArray(getResources().getString(R.string.picture));
+                if (byteArrayPicture != null) {
+                    ImageView iv_picture = (ImageView) findViewById(R.id.iv_picture);
+                    iv_picture.setImageBitmap(BitmapFactory.decodeByteArray(byteArrayPicture, 0, byteArrayPicture.length));
+                    iv_picture.setOnClickListener(new OnClickEventHandler(DELETE_IMAGE_FLAG, note.getId()));
+                }
+            }
             TextView tv_createdTime = (TextView) findViewById(R.id.tv_date);
-            tv_createdTime.setText(info.getString("createdTime"));
+            tv_createdTime.setText(info.getString(getResources().getString(R.string.createdTime)));
 
             EditText etTitle = (EditText) findViewById(R.id.et_title);
-            etTitle.setText(info.getString("title"));
+            etTitle.setText(info.getString(getResources().getString(R.string.title)));
 
             EditText etContent = (EditText) findViewById(R.id.et_content);
-            etContent.setText(info.getString("content"));
+            etContent.setText(info.getString(getResources().getString(R.string.content)));
 
             TextView tvAlarm = (TextView) findViewById(R.id.tv_alarm);
             tvAlarm.setVisibility(View.GONE);
@@ -110,13 +119,13 @@ public class SecondScreenActivity extends AppCompatActivity {
 
             Button btnDate = new Button(this);
             btnDate.setId(R.id.btnDate);
-            btnDate.setText(info.getString("date"));
+            btnDate.setText(info.getString(getResources().getString(R.string.date_2)));
             btnDate.setOnClickListener(new OnClickEventHandler(DATEPICKER_FLAG));
             datetimeLayout.addView(btnDate);
 
             Button btnTime = new Button(this);
             btnTime.setId(R.id.btnTime);
-            btnTime.setText(info.getString("hour"));
+            btnTime.setText(info.getString(getResources().getString(R.string.hour)));
             btnTime.setOnClickListener(new OnClickEventHandler(TIMEPICKER_FLAG));
             datetimeLayout.addView(btnTime);
 
@@ -133,15 +142,15 @@ public class SecondScreenActivity extends AppCompatActivity {
             imgbtn_savefile.setId(R.id.imgbtn_loadfile);
             imgbtn_savefile.setImageResource(R.drawable.savefile);
             imgbtn_savefile.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-            //imgbtn_savefile.setBackgroundColor(Color.TRANSPARENT);
-            imgbtn_savefile.setOnClickListener(new OnClickEventHandler(SAVEFILE_FLAG, info.getInt("note_id")));
+            imgbtn_savefile.setBackgroundColor(Color.TRANSPARENT);
+            imgbtn_savefile.setOnClickListener(new OnClickEventHandler(SAVEFILE_FLAG, info.getInt(getResources().getString(R.string.note_id))));
 
             ImageButton imgbtn_delete = new ImageButton(this);
             imgbtn_delete.setId(R.id.imgbtn_delete);
             imgbtn_delete.setImageResource(R.drawable.delete);
             imgbtn_delete.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-            //imgbtn_delete.setBackgroundColor(Color.TRANSPARENT);
-            imgbtn_delete.setOnClickListener(new OnClickEventHandler(DELETENOTE_FLAG, info.getInt("note_id")));
+            imgbtn_delete.setBackgroundColor(Color.TRANSPARENT);
+            imgbtn_delete.setOnClickListener(new OnClickEventHandler(DELETENOTE_FLAG, info.getInt(getResources().getString(R.string.note_id))));
 
             lnlayout_toolbar.addView(imgbtn_savefile);
             lnlayout_toolbar.addView(imgbtn_delete);
@@ -156,7 +165,7 @@ public class SecondScreenActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.second_menu, menu);
+        getMenuInflater().inflate(R.menu.notedetail_menu, menu);
         return true;
     }
 
@@ -164,7 +173,7 @@ public class SecondScreenActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(this, FirstScreenActivity.class);
+                Intent intent = new Intent(this, NoteList.class);
                 startActivity(intent);
                 return true;
 
@@ -192,6 +201,15 @@ public class SecondScreenActivity extends AppCompatActivity {
         popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        //dim background
+        View container;
+        container = (View)popupWindow.getContentView().getParent();
+        Context context = popupWindow.getContentView().getContext();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
+        p.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND; // add a flag here instead of clear others
+        p.dimAmount = 0.7f;
+        wm.updateViewLayout(container, p);
     }
 
     public void takePhotoHandle(View v) {
@@ -226,6 +244,8 @@ public class SecondScreenActivity extends AppCompatActivity {
             picture = BitmapFactory.decodeFile(imgDecodableString);
         }
 
+//        ExecutorService updateImageView = Executors.newFixedThreadPool(5);
+//        updateImageView.execute(new UpdateImageView(picture));
         ImageView iv_picture = (ImageView) findViewById(R.id.iv_picture);
         iv_picture.setImageBitmap(picture);
     }
@@ -241,6 +261,15 @@ public class SecondScreenActivity extends AppCompatActivity {
         popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        //dim background
+        View container;
+        container = (View)popupWindow.getContentView().getParent();
+        Context context = popupWindow.getContentView().getContext();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
+        p.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND; // add a flag here instead of clear others
+        p.dimAmount = 0.7f;
+        wm.updateViewLayout(container, p);
     }
 
     public void changeColor(View view) {
@@ -272,52 +301,53 @@ public class SecondScreenActivity extends AppCompatActivity {
 
         String dateHour = date + " " + hour;
 
-        // if note is not already exist
+        // if note is not exist
+        byte[] byteArray = null;
         ImageView iv_picture = (ImageView) findViewById(R.id.iv_picture);
-        if (note.getId() == -1) {
+        if (note.getId() == 0) {
             if (iv_picture.getDrawable() == null) {
                 note = new Note(title, content, createdTime, dateHour);
             } else {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 Bitmap picture = ((BitmapDrawable) iv_picture.getDrawable()).getBitmap();
                 picture.compress(Bitmap.CompressFormat.PNG, 0, stream);
-                byte[] byteArray = stream.toByteArray();
+                byteArray = stream.toByteArray();
                 note = new Note(title, content, createdTime, dateHour, byteArray);
             }
             db.addNote(note);
         } else {
             ContentValues contentValues = new ContentValues();
-            contentValues.put("title", title);
-            contentValues.put("content", content);
-            contentValues.put("created_time", createdTime);
+            contentValues.put(getResources().getString(R.string.title), title);
+            contentValues.put(getResources().getString(R.string.content), content);
+            contentValues.put(getResources().getString(R.string.createdTime), createdTime);
             contentValues.put("date_hour", dateHour);
             if (iv_picture.getDrawable() != null) {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 Bitmap picture = ((BitmapDrawable) iv_picture.getDrawable()).getBitmap();
                 picture.compress(Bitmap.CompressFormat.PNG, 0, stream);
-                byte[] byteArray = stream.toByteArray();
+                byteArray = stream.toByteArray();
 
                 //if note had a picture
                 if (db.getPicture(note.getId()) != null) {
                     //imageview doesn't change note picture
                     if (!db.getPicture(note.getId()).equals(byteArray)) {
-                        contentValues.put("picture", byteArray);
+                        contentValues.put(getResources().getString(R.string.picture), byteArray);
                     }
                 } else {
-                    contentValues.put("picture", byteArray);
+                    contentValues.put(getResources().getString(R.string.picture), byteArray);
                 }
             }
             db.updateData(contentValues, note.getId());
         }
 
-        alarmNotification(note.getId(), title, content, createdTime, date, hour);
+        alarmNotification(note.getId(), title, content, createdTime, date, hour, byteArray);
 
-        Intent intent = new Intent(this, FirstScreenActivity.class);
+        Intent intent = new Intent(this, NoteList.class);
         startActivity(intent);
     }
 
     //set alarm notification
-    private void alarmNotification(int noteId, String title, String content, String createdTime, String date, String hour) {
+    private void alarmNotification(int noteId, String title, String content, String createdTime, String date, String hour, byte[] byteArray) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReciever.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -336,7 +366,7 @@ public class SecondScreenActivity extends AppCompatActivity {
         cal.set(Calendar.SECOND, 0);
 
         AlarmReciever alarmReciever = new AlarmReciever();
-        alarmReciever.setTitleContent(noteId, title, content, createdTime, date, hour); //send title and content to AlarmReciever class
+        alarmReciever.setTitleContent(noteId, title, content, createdTime, date, hour, byteArray); //send title and content to AlarmReciever class
         alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
     }
 
@@ -406,16 +436,16 @@ public class SecondScreenActivity extends AppCompatActivity {
                     textView.setVisibility(View.VISIBLE);
                     break;
                 case DELETENOTE_FLAG:
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SecondScreenActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NoteDetail.this);
                     builder.setCancelable(true);
                     builder.setMessage(R.string.quit);
                     builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            SqliteHandler db = new SqliteHandler(SecondScreenActivity.this);
+                            SqliteHandler db = new SqliteHandler(NoteDetail.this);
                             db.deleteNote(id);
 
-                            Intent intent = new Intent(SecondScreenActivity.this, FirstScreenActivity.class);
+                            Intent intent = new Intent(NoteDetail.this, NoteList.class);
                             startActivity(intent);
                         }
                     });
@@ -437,7 +467,7 @@ public class SecondScreenActivity extends AppCompatActivity {
                         }
                         File note = new File(Directory, "Note.txt");
                         String fileContent;
-                        SqliteHandler db = new SqliteHandler(SecondScreenActivity.this);
+                        SqliteHandler db = new SqliteHandler(NoteDetail.this);
                         String title = db.getNoteTitle(id);
                         String content = db.getNoteContent(id);
                         fileContent = "Title: " + title + "\n" + "Content: " + content;
@@ -447,14 +477,38 @@ public class SecondScreenActivity extends AppCompatActivity {
                             writer.append(fileContent);
                             writer.flush();
                             writer.close();
-                            Toast.makeText(SecondScreenActivity.this, "Save file succesfully", Toast.LENGTH_LONG).show();
+                            Toast.makeText(NoteDetail.this, R.string.Save_file_successfully, Toast.LENGTH_LONG).show();
                         } catch (IOException e) {
-                            Toast.makeText(SecondScreenActivity.this, e.getMessage(), Toast.LENGTH_LONG ).show();
+                            Toast.makeText(NoteDetail.this, e.getMessage(), Toast.LENGTH_LONG ).show();
                         }
                     }
                     else{
-                        Toast.makeText(SecondScreenActivity.this, "SD card is not mounted now", Toast.LENGTH_LONG).show();
+                        Toast.makeText(NoteDetail.this, R.string.SD_card_is_not_mounted_now, Toast.LENGTH_LONG).show();
                     }
+                    break;
+                case DELETE_IMAGE_FLAG:
+                    AlertDialog.Builder builderImage = new AlertDialog.Builder(NoteDetail.this);
+                    builderImage.setCancelable(true);
+                    builderImage.setMessage(R.string.quit);
+                    builderImage.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SqliteHandler db = new SqliteHandler(NoteDetail.this);
+                            db.deletePictureFromNote(id);
+
+                            ImageView iv_picture = (ImageView) findViewById(R.id.iv_picture);
+                            iv_picture.setImageBitmap(null);
+                        }
+                    });
+
+                    builderImage.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //do nothing
+                        }
+                    });
+                    AlertDialog dialog_image = builderImage.create();
+                    dialog_image.show();
                     break;
             }
         }

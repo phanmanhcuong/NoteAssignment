@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="creadted_date_text_size">14px</dimen>
+    <dimen name="ll_note_in_notelist_padding_left">20px</dimen>
+    <dimen name="ll_note_in_notelist_padding_right">20px</dimen>
+    <dimen name="gv_padding_left">10px</dimen>
+    <dimen name="gv_padding_right">10px</dimen>
 </resources>

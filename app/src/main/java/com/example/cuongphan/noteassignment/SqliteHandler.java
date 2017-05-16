@@ -109,12 +109,6 @@ public class SqliteHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateNotePicture(int note_id, byte[] picture) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE " + TABLE_NAME + " SET picture = '" + picture + "' WHERE " + NOTE_ID + "= " + note_id);
-        db.close();
-    }
-
     public String getNoteTitle(int note_id){
         String selectQuery = "SELECT title FROM " + TABLE_NAME + " WHERE id = " + note_id;
         SQLiteDatabase db = this.getReadableDatabase();
