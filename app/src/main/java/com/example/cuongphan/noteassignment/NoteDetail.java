@@ -293,11 +293,33 @@ public class NoteDetail extends AppCompatActivity {
         TextView tv_createdTime = (TextView) findViewById(R.id.tv_date);
         String createdTime = tv_createdTime.getText().toString();
 
+        String date, hour = null;
         Button btn_datePicker = (Button) findViewById(R.id.btnDate);
-        String date = btn_datePicker.getText().toString();
+        if(btn_datePicker == null){
+            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            Date today = new Date();
+            date = dateFormat.format(today).toString();
+
+            DateFormat hourFormat = new SimpleDateFormat("HH:mm");
+            hour = hourFormat.format(today).toString();
+        }
+        else{
+            date = btn_datePicker.getText().toString();
+            if(date.equals("Date")){
+                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                Date today = new Date();
+                date = dateFormat.format(today).toString();
+            }
+        }
 
         Button btn_hourPicker = (Button) findViewById(R.id.btnTime);
-        String hour = btn_hourPicker.getText().toString();
+        if(btn_hourPicker != null){
+            if(hour.equals("Time")){
+                DateFormat hourFormat = new SimpleDateFormat("HH:mm");
+                Date today = new Date();
+                hour = hourFormat.format(today).toString();
+            }
+        }
 
         String dateHour = date + " " + hour;
 
