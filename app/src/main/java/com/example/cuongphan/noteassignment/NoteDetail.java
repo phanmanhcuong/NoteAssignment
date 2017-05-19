@@ -1,5 +1,6 @@
 package com.example.cuongphan.noteassignment;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DialogFragment;
 import android.app.PendingIntent;
@@ -7,6 +8,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +19,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -55,11 +59,13 @@ public class NoteDetail extends AppCompatActivity {
     private static final int DELETENOTE_FLAG = 4;
     private static final int SAVEFILE_FLAG = 5;
     private static final int DELETE_IMAGE_FLAG = 6;
+    private static final int PERMISSION_WAKELOCK = 1;
+    private static final int PERMISSION_WRITE_EXTERNAL_STORAGE= 2;
     private PopupWindow popupWindow;
     private static final int CAMERA_REQUEST = 1;
     private static final int GALLERY_LOAD_IMAGE = 2;
     private Note note = new Note();
-
+    private static boolean sCheckPermission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +90,7 @@ public class NoteDetail extends AppCompatActivity {
         if (info != null) {
             //get note id to check if note is already exist to update that note
             note.setId(info.getInt(getResources().getString(R.string.note_id)));
-            if(note.getId() != 0) {
+            if (note.getId() != 0) {
                 SqliteHandler db = new SqliteHandler(this);
                 byte[] byteArrayPicture = db.getPicture(info.getInt(getResources().getString(R.string.note_id)));
                 if (byteArrayPicture != null) {
@@ -92,8 +98,7 @@ public class NoteDetail extends AppCompatActivity {
                     iv_picture.setImageBitmap(BitmapFactory.decodeByteArray(byteArrayPicture, 0, byteArrayPicture.length));
                     iv_picture.setOnClickListener(new OnClickEventHandler(DELETE_IMAGE_FLAG, note.getId()));
                 }
-            }
-            else{
+            } else {
                 byte[] byteArrayPicture = info.getByteArray(getResources().getString(R.string.picture));
                 if (byteArrayPicture != null) {
                     ImageView iv_picture = (ImageView) findViewById(R.id.iv_picture);
@@ -140,14 +145,14 @@ public class NoteDetail extends AppCompatActivity {
 
             ImageButton imgbtn_savefile = new ImageButton(this);
             imgbtn_savefile.setId(R.id.imgbtn_loadfile);
-            imgbtn_savefile.setImageResource(R.drawable.savefile);
+            imgbtn_savefile.setImageResource(android.R.drawable.ic_menu_save);
             imgbtn_savefile.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
             imgbtn_savefile.setBackgroundColor(Color.TRANSPARENT);
             imgbtn_savefile.setOnClickListener(new OnClickEventHandler(SAVEFILE_FLAG, info.getInt(getResources().getString(R.string.note_id))));
 
             ImageButton imgbtn_delete = new ImageButton(this);
             imgbtn_delete.setId(R.id.imgbtn_delete);
-            imgbtn_delete.setImageResource(R.drawable.delete);
+            imgbtn_delete.setImageResource(android.R.drawable.ic_menu_delete);
             imgbtn_delete.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
             imgbtn_delete.setBackgroundColor(Color.TRANSPARENT);
             imgbtn_delete.setOnClickListener(new OnClickEventHandler(DELETENOTE_FLAG, info.getInt(getResources().getString(R.string.note_id))));
@@ -203,7 +208,7 @@ public class NoteDetail extends AppCompatActivity {
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         //dim background
         View container;
-        container = (View)popupWindow.getContentView().getParent();
+        container = (View) popupWindow.getContentView().getParent();
         Context context = popupWindow.getContentView().getContext();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
@@ -263,7 +268,7 @@ public class NoteDetail extends AppCompatActivity {
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
         //dim background
         View container;
-        container = (View)popupWindow.getContentView().getParent();
+        container = (View) popupWindow.getContentView().getParent();
         Context context = popupWindow.getContentView().getContext();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
@@ -294,6 +299,11 @@ public class NoteDetail extends AppCompatActivity {
         String createdTime = tv_createdTime.getText().toString();
 
         String date, hour = null;
+//        Button btn_datePicker = (Button) findViewById(R.id.btnDate);
+//        date = btn_datePicker.getText().toString();
+//
+//        Button btn_hourPicker = (Button) findViewById(R.id.btnTime);
+//        hour = btn_hourPicker.getText().toString();
         Button btn_datePicker = (Button) findViewById(R.id.btnDate);
         if(btn_datePicker == null){
             DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -314,6 +324,7 @@ public class NoteDetail extends AppCompatActivity {
 
         Button btn_hourPicker = (Button) findViewById(R.id.btnTime);
         if(btn_hourPicker != null){
+            hour = btn_hourPicker.getText().toString();
             if(hour.equals("Time")){
                 DateFormat hourFormat = new SimpleDateFormat("HH:mm");
                 Date today = new Date();
@@ -362,11 +373,35 @@ public class NoteDetail extends AppCompatActivity {
             db.updateData(contentValues, note.getId());
         }
 
-        alarmNotification(note.getId(), title, content, createdTime, date, hour, byteArray);
+        checkWakeLockPermission();
+        if (sCheckPermission) {
+            alarmNotification(note.getId(), title, content, createdTime, date, hour, byteArray);
 
-        Intent intent = new Intent(this, NoteList.class);
-        startActivity(intent);
+            Intent intent = new Intent(this, NoteList.class);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.permission_wake_clock), Toast.LENGTH_LONG).show();
+        }
     }
+
+    private void checkWakeLockPermission() {
+        sCheckPermission = false;
+        if (ContextCompat.checkSelfPermission(NoteDetail.this, Manifest.permission.WAKE_LOCK) == PackageManager.PERMISSION_GRANTED) {
+            sCheckPermission = true;
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WAKE_LOCK}, PERMISSION_WAKELOCK);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if(requestCode == PERMISSION_WAKELOCK || requestCode == PERMISSION_WRITE_EXTERNAL_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                sCheckPermission = true;
+            }
+        }
+    }
+
 
     //set alarm notification
     private void alarmNotification(int noteId, String title, String content, String createdTime, String date, String hour, byte[] byteArray) {
@@ -482,30 +517,35 @@ public class NoteDetail extends AppCompatActivity {
                     dialog.show();
                     break;
                 case SAVEFILE_FLAG:
-                    if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-                        File Directory = new File(Environment.getExternalStorageDirectory(), "Notes");
-                        if (!Directory.exists()) {
-                            Directory.mkdirs();
-                        }
-                        File note = new File(Directory, "Note.txt");
-                        String fileContent;
-                        SqliteHandler db = new SqliteHandler(NoteDetail.this);
-                        String title = db.getNoteTitle(id);
-                        String content = db.getNoteContent(id);
-                        fileContent = "Title: " + title + "\n" + "Content: " + content;
-                        FileWriter writer = null;
-                        try {
-                            writer = new FileWriter(note);
-                            writer.append(fileContent);
-                            writer.flush();
-                            writer.close();
-                            Toast.makeText(NoteDetail.this, R.string.Save_file_successfully, Toast.LENGTH_LONG).show();
-                        } catch (IOException e) {
-                            Toast.makeText(NoteDetail.this, e.getMessage(), Toast.LENGTH_LONG ).show();
+                    checkWriteExternalStorage();
+                    if(sCheckPermission){
+                        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+                            File Directory = new File(Environment.getExternalStorageDirectory(), "Notes");
+                            if (!Directory.exists()) {
+                                Directory.mkdirs();
+                            }
+                            File note = new File(Directory, "Note.txt");
+                            String fileContent;
+                            SqliteHandler db = new SqliteHandler(NoteDetail.this);
+                            String title = db.getNoteTitle(id);
+                            String content = db.getNoteContent(id);
+                            fileContent = "Title: " + title + "\n" + "Content: " + content;
+                            FileWriter writer = null;
+                            try {
+                                writer = new FileWriter(note);
+                                writer.append(fileContent);
+                                writer.flush();
+                                writer.close();
+                                Toast.makeText(NoteDetail.this, R.string.Save_file_successfully, Toast.LENGTH_LONG).show();
+                            } catch (IOException e) {
+                                Toast.makeText(NoteDetail.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(NoteDetail.this, getResources().getString(R.string.SD_card_is_not_mounted_now), Toast.LENGTH_LONG).show();
                         }
                     }
                     else{
-                        Toast.makeText(NoteDetail.this, R.string.SD_card_is_not_mounted_now, Toast.LENGTH_LONG).show();
+                        Toast.makeText(NoteDetail.this, getResources().getString(R.string.permission_write), Toast.LENGTH_LONG).show();
                     }
                     break;
                 case DELETE_IMAGE_FLAG:
@@ -534,5 +574,16 @@ public class NoteDetail extends AppCompatActivity {
                     break;
             }
         }
+
+        private void checkWriteExternalStorage() {
+            sCheckPermission = false;
+            if (ContextCompat.checkSelfPermission(NoteDetail.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                sCheckPermission = true;
+            } else {
+                ActivityCompat.requestPermissions(NoteDetail.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_EXTERNAL_STORAGE);
+            }
+        }
     }
+
+
 }

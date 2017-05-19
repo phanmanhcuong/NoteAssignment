@@ -5,12 +5,12 @@
     <item
         android:id="@+id/item_camera"
         android:title="@string/camera"
-        android:icon="@drawable/camera"
+        android:icon="@android:drawable/ic_menu_camera"
         app:showAsAction="always" />
     <item
         android:id="@+id/item_background"
         android:title="@string/backgroundcolor"
-        android:icon="@drawable/edit"
+        android:icon="@android:drawable/ic_menu_edit"
         app:showAsAction="always"/>
 
     <item

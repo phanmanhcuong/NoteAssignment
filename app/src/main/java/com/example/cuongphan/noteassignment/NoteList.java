@@ -21,10 +21,10 @@ public class NoteList extends AppCompatActivity {
         ActionBar actionBar = this.getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setIcon(R.drawable.note);
-        shownotes2();
+        shownotes();
     }
 
-    private void shownotes2(){
+    private void shownotes(){
         SqliteHandler db = new SqliteHandler(this);
         List<Note> noteList = db.getAllNotes();
 

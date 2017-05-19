@@ -5,7 +5,8 @@
     android:id="@+id/ln_layout_loadpicture"
     android:orientation="vertical"
     android:background="@color/colorWhite"
-    android:theme="@android:style/Theme.Light">
+    android:theme="@android:style/Theme.Light"
+    android:paddingLeft="@dimen/ll_note_in_notelist_padding_left">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/btn_takephoto"
             android:text="@string/take_photo"
-            android:drawableLeft="@drawable/camera2"
+            android:drawableLeft="@android:drawable/ic_menu_camera"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
             android:onClick="takePhotoHandle"/>
@@ -30,6 +31,6 @@
             android:text="@string/choose_photo"
             android:gravity="center_vertical"
             android:background="@android:color/transparent"
-            android:drawableLeft="@drawable/uploadimage"
+            android:drawableLeft="@android:drawable/ic_menu_gallery"
             android:onClick="choosePhotoHandle"/>
 </LinearLayout>

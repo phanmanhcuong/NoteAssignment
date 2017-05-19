@@ -25,4 +25,6 @@
     <string name="hour">hour</string>
     <string name="picture">picture</string>
     <string name="SD_card_is_not_mounted_now">SD card is not mounted now</string>
+    <string name="permission_write">write permission is denied</string>
+    <string name="permission_wake_clock">permission wake clock is denied</string>
 </resources>
