@@ -25,6 +25,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -136,35 +137,19 @@ public class NoteDetail extends AppCompatActivity {
 
             alarmLayout.addView(datetimeLayout);
 
-            //create bottom toolbar to delete and load file
-            Toolbar bottomToolbar = new Toolbar(this);
-            Toolbar.LayoutParams toolbarParams = new Toolbar.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            bottomToolbar.setLayoutParams(toolbarParams);
-            bottomToolbar.setVisibility(View.VISIBLE);
-            LinearLayout lnlayout_toolbar = new LinearLayout(this);
+            //load bottom toolbar to delete and load file
+            LinearLayout bottom_menu = (LinearLayout)this.getLayoutInflater().inflate(R.layout.bottom_menu_notedetail, null);
 
-            ImageButton imgbtn_savefile = new ImageButton(this);
-            imgbtn_savefile.setId(R.id.imgbtn_loadfile);
-            imgbtn_savefile.setImageResource(android.R.drawable.ic_menu_save);
-            imgbtn_savefile.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-            imgbtn_savefile.setBackgroundColor(Color.TRANSPARENT);
-            imgbtn_savefile.setOnClickListener(new OnClickEventHandler(SAVEFILE_FLAG, info.getInt(getResources().getString(R.string.note_id))));
+            ImageButton btn_savefile = (ImageButton)bottom_menu.findViewById(R.id.btn_savefile);
+            btn_savefile.setOnClickListener(new OnClickEventHandler(SAVEFILE_FLAG, info.getInt(getResources().getString(R.string.note_id))));
 
-            ImageButton imgbtn_delete = new ImageButton(this);
-            imgbtn_delete.setId(R.id.imgbtn_delete);
-            imgbtn_delete.setImageResource(android.R.drawable.ic_menu_delete);
-            imgbtn_delete.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-            imgbtn_delete.setBackgroundColor(Color.TRANSPARENT);
-            imgbtn_delete.setOnClickListener(new OnClickEventHandler(DELETENOTE_FLAG, info.getInt(getResources().getString(R.string.note_id))));
-
-            lnlayout_toolbar.addView(imgbtn_savefile);
-            lnlayout_toolbar.addView(imgbtn_delete);
-            lnlayout_toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            ImageButton btn_deletefile = (ImageButton)bottom_menu.findViewById(R.id.btn_delete);
+            btn_deletefile.setOnClickListener(new OnClickEventHandler(DELETENOTE_FLAG, info.getInt(getResources().getString(R.string.note_id))));
 
             RelativeLayout relativeLayout_screen2 = (RelativeLayout) findViewById(R.id.rl_screen2);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            relativeLayout_screen2.addView(lnlayout_toolbar, params);
+            relativeLayout_screen2.addView(bottom_menu, params);
         }
     }
 

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:id="@+id/ll_bottom_menu">
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_savefile"
+        android:layout_weight="1"
+        android:text="@string/savefile"
+        android:src="@android:drawable/ic_menu_save"
+        android:background="@android:color/transparent"
+        android:paddingTop="@dimen/imgbtn_bottom_menu_padding_top"
+        android:paddingBottom="@dimen/imgbtn_bottom_menu_padding_bot"/>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_delete"
+        android:layout_weight="1"
+        android:src="@android:drawable/ic_menu_delete"
+        android:background="@android:color/transparent"
+        android:paddingTop="@dimen/imgbtn_bottom_menu_padding_top"
+        android:paddingBottom="@dimen/imgbtn_bottom_menu_padding_bot"/>
+</LinearLayout>

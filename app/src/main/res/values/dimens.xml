@@ -5,4 +5,6 @@
     <dimen name="ll_note_in_notelist_padding_right">20px</dimen>
     <dimen name="gv_padding_left">10px</dimen>
     <dimen name="gv_padding_right">10px</dimen>
+    <dimen name="imgbtn_bottom_menu_padding_top">10px</dimen>
+    <dimen name="imgbtn_bottom_menu_padding_bot">10px</dimen>
 </resources>
