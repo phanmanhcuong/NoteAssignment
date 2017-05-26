@@ -436,7 +436,7 @@ public class NoteDetail extends AppCompatActivity {
             datetimeLayout.addView(btnTime);
 
             ImageButton btnExit = new ImageButton(this);
-            btnExit.setImageResource(R.drawable.quit);
+            btnExit.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_close_clear_cancel));
             btnExit.setOnClickListener(new OnClickEventHandler(EXITDATETIMEPICKER_FLAG));
             datetimeLayout.addView(btnExit);
 
